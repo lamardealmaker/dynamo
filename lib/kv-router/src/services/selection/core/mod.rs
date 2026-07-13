@@ -105,6 +105,11 @@ pub struct SelectionCore {
 impl SelectionCore {
     /// Create an intentionally local selector without replica synchronization
     /// or startup recovery.
+    ///
+    /// # Panics
+    ///
+    /// Panics when the tracking-hash configuration is invalid. Use
+    /// [`Self::try_new_local`] when configuration errors must be reported.
     pub fn new_local(
         kv_router_config: crate::config::KvRouterConfig,
         indexer_threads: usize,
@@ -114,6 +119,7 @@ impl SelectionCore {
             .expect("selection tracking hash configuration must be valid")
     }
 
+    /// Create a local selector and report invalid tracking configuration.
     pub fn try_new_local(
         kv_router_config: crate::config::KvRouterConfig,
         indexer_threads: usize,
